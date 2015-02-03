@@ -51,19 +51,6 @@ typedef unsigned long long  uint64;
 // This is needed because the foreach macro can't get over the comma in pair<t1, t2>
 #define PAIRTYPE(t1, t2)    std::pair<t1, t2>
 
-// Align by increasing pointer, must have extra space at end of buffer
-template <size_t nBytes, typename T>
-T* alignup(T* p)
-{
-    union
-    {
-        T* ptr;
-        size_t n;
-    } u;
-    u.ptr = p;
-    u.n = (u.n + (nBytes-1)) & ~(nBytes-1);
-    return u.ptr;
-}
 
 #define WSAGetLastError()   errno
 #define WSAEINVAL           EINVAL
@@ -640,12 +627,6 @@ inline void ExitThread(size_t nExitCode)
     pthread_exit((void*)nExitCode);
 }
 
-
-
-inline bool AffinityBugWorkaround(void(*pfn)(void*))
-{
-    return false;
-}
 
 inline uint32_t ByteReverse(uint32_t value)
 {
