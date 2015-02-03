@@ -1748,7 +1748,6 @@ pair<string, rpcfn_type> pCallTable[] =
     make_pair("getblocknumber",         &getblocknumber),
     make_pair("getconnectioncount",     &getconnectioncount),
     make_pair("getdifficulty",          &getdifficulty),
-    make_pair("gethashespersec",        &gethashespersec),
     make_pair("getinfo",                &getinfo),
     make_pair("getnewaddress",          &getnewaddress),
     make_pair("getaccountaddress",      &getaccountaddress),
@@ -1791,7 +1790,6 @@ string pAllowInSafeMode[] =
     "getblocknumber",  // deprecated
     "getconnectioncount",
     "getdifficulty",
-    "gethashespersec",
     "getinfo",
     "getnewaddress",
     "getaccountaddress",
