@@ -134,7 +134,7 @@ bool AppInit2(int argc, char* argv[])
         }
         else
         {
-            fprintf(stderr, "Error: Specified directory does not exist\n");
+            printf("Error: Specified directory does not exist\n");
             Shutdown(NULL);
         }
     }
@@ -255,7 +255,7 @@ bool AppInit2(int argc, char* argv[])
     static boost::interprocess::file_lock lock(strLockFile.c_str());
     if (!lock.try_lock())
     {
-        fprintf(stderr, "Cannot obtain a lock on data directory %s.  Bitcoin is probably already running.", GetDataDir().c_str());
+        printf("Cannot obtain a lock on data directory %s.  Bitcoin is probably already running.\n", GetDataDir().c_str());
         return false;
     }
 
@@ -295,7 +295,7 @@ bool AppInit2(int argc, char* argv[])
         else if (nLoadWalletRet == DB_NEED_REWRITE)
         {
             strErrors += _("Wallet needed to be rewritten: restart Bitcoin to complete    \n");
-            fprintf(stderr, strErrors);
+            printf(strErrors);
             return false;
         }
         else
@@ -334,7 +334,7 @@ bool AppInit2(int argc, char* argv[])
 
     if (!strErrors.empty())
     {
-        fprintf(stderr, strErrors);
+        printf(strErrors);
         return false;
     }
 
@@ -392,7 +392,7 @@ bool AppInit2(int argc, char* argv[])
         addrProxy = CAddress(mapArgs["-proxy"]);
         if (!addrProxy.IsValid())
         {
-            fprintf(stderr, "Invalid -proxy address");
+            printf("Invalid -proxy address\n");
             return false;
         }
     }
@@ -417,7 +417,7 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!BindListenPort(strErrors))
         {
-            fprintf(stderr, strErrors);
+            printf(strErrors);
             return false;
         }
     }
@@ -437,11 +437,11 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!ParseMoney(mapArgs["-paytxfee"], nTransactionFee))
         {
-            fprintf(stderr, "Invalid amount for -paytxfee=<amount>");
+            printf("Invalid amount for -paytxfee=<amount>\n");
             return false;
         }
         if (nTransactionFee > 0.25 * COIN)
-            printf("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction.");
+            printf("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction.\n");
     }
 
     //
@@ -453,7 +453,7 @@ bool AppInit2(int argc, char* argv[])
     RandAddSeedPerfmon();
 
     if (!CreateThread(StartNode, NULL))
-         fprintf(stderr, "Error: CreateThread(StartNode) failed");
+         fprintf(stderr, "Error: CreateThread(StartNode) failed\n");
 
     if (fServer)
         CreateThread(ThreadRPCServer, NULL);
