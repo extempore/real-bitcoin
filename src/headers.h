@@ -63,4 +63,3 @@
 #include "bignum.h"
 #include "base58.h"
 #include "main.h"
-#include "noui.h"

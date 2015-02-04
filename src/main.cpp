@@ -55,8 +55,6 @@ int fGenerateBitcoins = false;
 int64 nTransactionFee = 0;
 int fLimitProcessors = false;
 int nLimitProcessors = 1;
-int fMinimizeToTray = true;
-int fMinimizeOnClose = true;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -807,7 +805,6 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
     {
         bnBestInvalidWork = pindexNew->bnChainWork;
         CTxDB().WriteBestInvalidWork(bnBestInvalidWork);
-        MainFrameRepaint();
     }
     printf("InvalidChainFound: invalid block=%s  height=%d  work=%s\n", pindexNew->GetBlockHash().ToString().substr(0,20).c_str(), pindexNew->nHeight, pindexNew->bnChainWork.ToString().c_str());
     printf("InvalidChainFound:  current best=%s  height=%d  work=%s\n", hashBestChain.ToString().substr(0,20).c_str(), nBestHeight, bnBestChainWork.ToString().c_str());
@@ -1323,7 +1320,6 @@ bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos)
         hashPrevBestCoinBase = vtx[0].GetHash();
     }
 
-    MainFrameRepaint();
     return true;
 }
 
@@ -1517,7 +1513,6 @@ bool CheckDiskSpace(uint64 nAdditionalBytes)
         string strMessage = _("Warning: Disk space is low  ");
         strMiscWarning = strMessage;
         printf("*** %s\n", strMessage.c_str());
-        ThreadSafeMessageBox(strMessage, "Bitcoin", wxOK | wxICON_EXCLAMATION);
         CreateThread(Shutdown, NULL);
         return false;
     }
@@ -3059,8 +3054,7 @@ void static BitcoinMiner(CWallet *pwallet)
                         dHashesPerSec = 1000.0 * nHashCounter / (GetTimeMillis() - nHPSTimerStart);
                         nHPSTimerStart = GetTimeMillis();
                         nHashCounter = 0;
-                        string strStatus = strprintf("    %.0f khash/s", dHashesPerSec/1000.0);
-                        UIThreadCall(boost::bind(CalledSetStatusBar, strStatus, 0));
+
                         static int64 nLogTime;
                         if (GetTime() - nLogTime > 30 * 60)
                         {
@@ -3111,7 +3105,7 @@ void static ThreadBitcoinMiner(void* parg)
         vnThreadsRunning[3]--;
         PrintException(NULL, "ThreadBitcoinMiner()");
     }
-    UIThreadCall(boost::bind(CalledSetStatusBar, "", 0));
+
     nHPSTimerStart = 0;
     if (vnThreadsRunning[3] == 0)
         dHashesPerSec = 0;
@@ -3125,7 +3119,6 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet)
     {
         fGenerateBitcoins = fGenerate;
         WriteSetting("fGenerateBitcoins", fGenerateBitcoins);
-        MainFrameRepaint();
     }
     if (fGenerateBitcoins)
     {
