@@ -37,11 +37,6 @@ typedef unsigned long long  uint64;
 #define ARRAYLEN(array)     (sizeof(array)/sizeof((array)[0]))
 #define printf              OutputDebugStringF
 
-#ifdef snprintf
-#undef snprintf
-#endif
-#define snprintf my_snprintf
-
 #ifndef PRI64d
 #define PRI64d  "lld"
 #define PRI64u  "llu"
@@ -77,7 +72,6 @@ T* alignup(T* p)
 #define INVALID_SOCKET      (SOCKET)(~0)
 #define SOCKET_ERROR        -1
 typedef u_int SOCKET;
-#define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
 #define strlwr(psz)         to_lower(psz)
 #define _strlwr(psz)        to_lower(psz)
 #define MAX_PATH            1024
@@ -128,7 +122,6 @@ int OutputDebugStringF(const char* pszFormat, ...);
 int my_snprintf(char* buffer, size_t limit, const char* format, ...);
 std::string strprintf(const std::string &format, ...);
 bool error(const std::string &format, ...);
-void LogException(std::exception* pex, const char* pszThread);
 void PrintException(std::exception* pex, const char* pszThread);
 void PrintExceptionContinue(std::exception* pex, const char* pszThread);
 void ParseString(const std::string& str, char c, std::vector<std::string>& v);
@@ -153,7 +146,6 @@ void CreatePidFile(std::string pidFile, pid_t pid);
 void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet, std::map<std::string, std::vector<std::string> >& mapMultiSettingsRet);
 std::string GetDefaultDataDir();
 std::string GetDataDir();
-void ShrinkDebugFile();
 int GetRandInt(int nMax);
 uint64 GetRand(uint64 nMax);
 int64 GetTime();

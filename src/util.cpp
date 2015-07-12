@@ -30,7 +30,7 @@ bool fServer = false;
 bool fCommandLine = false;
 string strMiscWarning;
 bool fNoListen = false;
-bool fLogTimestamps = false;
+bool fLogTimestamps = true;
 
 
 
@@ -193,7 +193,7 @@ int my_snprintf(char* buffer, size_t limit, const char* format, ...)
         return 0;
     va_list arg_ptr;
     va_start(arg_ptr, format);
-    int ret = _vsnprintf(buffer, limit, format, arg_ptr);
+    int ret = vsnprintf(buffer, limit, format, arg_ptr);
     va_end(arg_ptr);
     if (ret < 0 || ret >= limit)
     {
@@ -213,7 +213,7 @@ string strprintf(const std::string &format, ...)
     {
         va_list arg_ptr;
         va_start(arg_ptr, format);
-        ret = _vsnprintf(p, limit, format.c_str(), arg_ptr);
+        ret = vsnprintf(p, limit, format.c_str(), arg_ptr);
         va_end(arg_ptr);
         if (ret >= 0 && ret < limit)
             break;
@@ -236,7 +236,7 @@ bool error(const std::string &format, ...)
     int limit = sizeof(buffer);
     va_list arg_ptr;
     va_start(arg_ptr, format);
-    int ret = _vsnprintf(buffer, limit, format.c_str(), arg_ptr);
+    int ret = vsnprintf(buffer, limit, format.c_str(), arg_ptr);
     va_end(arg_ptr);
     if (ret < 0 || ret >= limit)
     {
@@ -601,19 +601,13 @@ void FormatException(char* pszMessage, std::exception* pex, const char* pszThrea
 {
     const char* pszModule = "bitcoin";
     if (pex)
-        snprintf(pszMessage, 1000,
+        my_snprintf(pszMessage, 1000,
             "EXCEPTION: %s       \n%s       \n%s in %s       \n", typeid(*pex).name(), pex->what(), pszModule, pszThread);
     else
-        snprintf(pszMessage, 1000,
+        my_snprintf(pszMessage, 1000,
             "UNKNOWN EXCEPTION       \n%s in %s       \n", pszModule, pszThread);
 }
 
-void LogException(std::exception* pex, const char* pszThread)
-{
-    char pszMessage[10000];
-    FormatException(pszMessage, pex, pszThread);
-    printf("\n%s", pszMessage);
-}
 
 void PrintException(std::exception* pex, const char* pszThread)
 {
@@ -760,34 +754,6 @@ int GetFilesize(FILE* file)
     fseek(file, nSavePos, SEEK_SET);
     return nFilesize;
 }
-
-void ShrinkDebugFile()
-{
-    // Scroll debug.log if it's getting too big
-    string strFile = GetDataDir() + "/debug.log";
-    FILE* file = fopen(strFile.c_str(), "r");
-    if (file && GetFilesize(file) > 10 * 1000000)
-    {
-        // Restart the file with some of the end
-        char pch[200000];
-        fseek(file, -sizeof(pch), SEEK_END);
-        int nBytes = fread(pch, 1, sizeof(pch), file);
-        fclose(file);
-
-        file = fopen(strFile.c_str(), "w");
-        if (file)
-        {
-            fwrite(pch, 1, nBytes, file);
-            fclose(file);
-        }
-    }
-}
-
-
-
-
-
-
 
 
 //

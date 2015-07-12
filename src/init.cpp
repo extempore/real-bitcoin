@@ -240,11 +240,7 @@ bool AppInit2(int argc, char* argv[])
             fprintf(stderr, "Error: setsid() returned %d errno %d\n", sid, errno);
     }
 
-    if (!fDebug && !pszSetDataDir[0])
-        ShrinkDebugFile();
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    printf("Bitcoin version %s\n", FormatFullVersion().c_str());
-    printf("Default data directory %s\n", GetDefaultDataDir().c_str());
+    printf("\n\n\nBitcoin version %s\nDefault data directory %s\n", FormatFullVersion().c_str(), GetDefaultDataDir().c_str());
 
     if (GetBoolArg("-loadblockindextest"))
     {
@@ -275,21 +271,18 @@ bool AppInit2(int argc, char* argv[])
     strErrors = "";
     int64 nStart;
 
-    InitMessage(_("Loading addresses..."));
     printf("Loading addresses...\n");
     nStart = GetTimeMillis();
     if (!LoadAddresses())
         strErrors += _("Error loading addr.dat      \n");
     printf(" addresses   %15"PRI64d"ms\n", GetTimeMillis() - nStart);
 
-    InitMessage(_("Loading block index..."));
     printf("Loading block index...\n");
     nStart = GetTimeMillis();
     if (!LoadBlockIndex())
         strErrors += _("Error loading blkindex.dat      \n");
     printf(" block index %15"PRI64d"ms\n", GetTimeMillis() - nStart);
 
-    InitMessage(_("Loading wallet..."));
     printf("Loading wallet...\n");
     nStart = GetTimeMillis();
     bool fFirstRun;
@@ -326,14 +319,12 @@ bool AppInit2(int argc, char* argv[])
     }
     if (pindexBest != pindexRescan)
     {
-        InitMessage(_("Rescanning..."));
         printf("Rescanning last %i blocks (from block %i)...\n", pindexBest->nHeight - pindexRescan->nHeight, pindexRescan->nHeight);
         nStart = GetTimeMillis();
         pwalletMain->ScanForWalletTransactions(pindexRescan, true);
         printf(" rescan      %15"PRI64d"ms\n", GetTimeMillis() - nStart);
     }
 
-    InitMessage(_("Done loading"));
     printf("Done loading\n");
 
         //// debug print
