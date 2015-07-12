@@ -27,7 +27,6 @@ bool fDaemon = false;
 bool fServer = false;
 bool fCommandLine = false;
 string strMiscWarning;
-bool fTestNet = false;
 bool fNoListen = false;
 bool fLogTimestamps = false;
 
@@ -683,14 +682,6 @@ void GetDataDir(char* pszDir)
             strlcpy(pszCachedDir, GetDefaultDataDir().c_str(), sizeof(pszCachedDir));
         strlcpy(pszDir, pszCachedDir, MAX_PATH);
         nVariation = 1;
-    }
-    if (fTestNet)
-    {
-        char* p = pszDir + strlen(pszDir);
-        if (p > pszDir && p[-1] != '/' && p[-1] != '\\')
-            *p++ = '/';
-        strcpy(p, "testnet");
-        nVariation += 2;
     }
     static bool pfMkdir[4];
     if (!pfMkdir[nVariation])
