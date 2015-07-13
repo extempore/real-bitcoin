@@ -83,7 +83,6 @@ HEADERS = \
     keystore.h \
     main.h \
     net.h \
-    noui.h \
     protocol.h \
     bitcoinrpc.h \
     script.h \

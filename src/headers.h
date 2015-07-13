@@ -17,6 +17,7 @@
 #define BSD 1
 #endif
 #endif
+#include <boost/function.hpp>
 #include <openssl/buffer.h>
 #include <openssl/ecdsa.h>
 #include <openssl/evp.h>
@@ -63,4 +64,4 @@
 #include "bignum.h"
 #include "base58.h"
 #include "main.h"
-#include "noui.h"
+#include "wallet.h"

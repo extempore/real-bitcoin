@@ -156,7 +156,6 @@ bool AppInit2(int argc, char* argv[])
             "  -pid=<file>      \t\t  " + _("Specify pid file (default: bitcoind.pid)\n") +
             "  -gen             \t\t  " + _("Generate coins\n") +
             "  -gen=0           \t\t  " + _("Don't generate coins\n") +
-            "  -min             \t\t  " + _("Start minimized\n") +
             "  -datadir=<dir>   \t\t  " + _("Specify data directory\n") +
             "  -timeout=<n>     \t  "   + _("Specify connection timeout (in milliseconds)\n") +
             "  -proxy=<ip:port> \t  "   + _("Connect through socks4 proxy\n") +
@@ -257,7 +256,7 @@ bool AppInit2(int argc, char* argv[])
     static boost::interprocess::file_lock lock(strLockFile.c_str());
     if (!lock.try_lock())
     {
-        wxMessageBox(strprintf(_("Cannot obtain a lock on data directory %s.  Bitcoin is probably already running."), GetDataDir().c_str()), "Bitcoin");
+        fprintf(stderr, "Cannot obtain a lock on data directory %s.  Bitcoin is probably already running.\n", GetDataDir().c_str());
         return false;
     }
 
@@ -297,7 +296,7 @@ bool AppInit2(int argc, char* argv[])
         else if (nLoadWalletRet == DB_NEED_REWRITE)
         {
             strErrors += _("Wallet needed to be rewritten: restart Bitcoin to complete    \n");
-            wxMessageBox(strErrors, "Bitcoin", wxOK | wxICON_ERROR);
+            fprintf(stderr, strErrors.c_str());
             return false;
         }
         else
@@ -336,7 +335,7 @@ bool AppInit2(int argc, char* argv[])
 
     if (!strErrors.empty())
     {
-        wxMessageBox(strErrors, "Bitcoin", wxOK | wxICON_ERROR);
+        fprintf(stderr, strErrors.c_str());
         return false;
     }
 
@@ -394,7 +393,7 @@ bool AppInit2(int argc, char* argv[])
         addrProxy = CAddress(mapArgs["-proxy"]);
         if (!addrProxy.IsValid())
         {
-            wxMessageBox(_("Invalid -proxy address"), "Bitcoin");
+            fprintf(stderr, "Invalid -proxy address\n");
             return false;
         }
     }
@@ -415,7 +414,7 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!BindListenPort(strErrors))
         {
-            wxMessageBox(strErrors, "Bitcoin");
+            fprintf(stderr, strErrors.c_str());
             return false;
         }
     }
@@ -435,11 +434,11 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!ParseMoney(mapArgs["-paytxfee"], nTransactionFee))
         {
-            wxMessageBox(_("Invalid amount for -paytxfee=<amount>"), "Bitcoin");
+            fprintf(stderr, "Invalid amount for -paytxfee=<amount>\n");
             return false;
         }
         if (nTransactionFee > 0.25 * COIN)
-            wxMessageBox(_("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction."), "Bitcoin", wxOK | wxICON_EXCLAMATION);
+           printf("Warning: -paytxfee is set very high.  This is the transaction fee you will pay if you send a transaction.\n");
     }
 
     //
@@ -451,7 +450,7 @@ bool AppInit2(int argc, char* argv[])
     RandAddSeedPerfmon();
 
     if (!CreateThread(StartNode, NULL))
-        wxMessageBox(_("Error: CreateThread(StartNode) failed"), "Bitcoin");
+        fprintf(stderr, "Error: CreateThread(StartNode) failed\n");
 
     if (fServer)
         CreateThread(ThreadRPCServer, NULL);

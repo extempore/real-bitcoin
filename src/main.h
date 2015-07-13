@@ -66,10 +66,6 @@ extern int fGenerateBitcoins;
 extern int64 nTransactionFee;
 extern int fLimitProcessors;
 extern int nLimitProcessors;
-extern int fMinimizeToTray;
-extern int fMinimizeOnClose;
-
-
 
 
 
