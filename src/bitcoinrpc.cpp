@@ -2130,7 +2130,9 @@ void ThreadRPCServer2(void* parg)
 
     strRPCUserColonPass = mapArgs["-rpcuser"] + ":" + mapArgs["-rpcpassword"];
     if (strRPCUserColonPass == ":") {
-        printf("Error: you must set a rpcpassword in the configuration file");
+        unsigned char rand_pwd[32];
+        RAND_bytes(rand_pwd, 32);
+        printf("Error: you must set a rpcpassword in the configuration. Here is a random one: %s\n", EncodeBase58(&rand_pwd[0],&rand_pwd[0]+32).c_str());
         CreateThread(Shutdown, NULL);
         return;
     }

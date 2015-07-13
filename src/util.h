@@ -102,6 +102,7 @@ inline const char* _(const char* psz)
 extern std::map<std::string, std::string> mapArgs;
 extern std::map<std::string, std::vector<std::string> > mapMultiArgs;
 extern bool fDebug;
+extern bool fShrinkDebug;
 extern bool fPrintToConsole;
 extern bool fPrintToDebugger;
 extern bool fCanEat;

@@ -18,6 +18,7 @@ using namespace boost;
 map<string, string> mapArgs;
 map<string, vector<string> > mapMultiArgs;
 bool fDebug = false;
+bool fShrinkDebug = false;
 bool fPrintToConsole = false;
 bool fPrintToDebugger = false;
 bool fCanEat = false;

@@ -172,6 +172,7 @@ bool AppInit2(int argc, char* argv[])
             "  -paytxfee=<amt>  \t  "   + _("Fee per kB to add to transactions you send\n") +
             "  -daemon          \t\t  " + _("Run in the background as a daemon and accept commands\n") +
             "  -debug           \t\t  " + _("Output extra debugging information\n") +
+        "  -shrinkdebug           \t\t  " + _("Shrink debug file on startup\n") +
 	    "  -caneat          \t\t  " + _("Permit the use of 'eatblock'\n") +
 	    "  -verifyall       \t\t  " + _("Forbid the skipping of ECDSA signature verification between checkpoints.\n") +
             "  -logtimestamps   \t  "   + _("Prepend debug output with timestamp\n") +
@@ -194,6 +195,7 @@ bool AppInit2(int argc, char* argv[])
     }
 
     fDebug = GetBoolArg("-debug");
+    fShrinkDebug = GetBoolArg("-shrinkdebug");
     fDaemon = GetBoolArg("-daemon");
     fCanEat = GetBoolArg("-caneat");
     fVerifyAll = GetBoolArg("-verifyall");
@@ -238,6 +240,9 @@ bool AppInit2(int argc, char* argv[])
         if (sid < 0)
             fprintf(stderr, "Error: setsid() returned %d errno %d\n", sid, errno);
     }
+
+    if (fShrinkDebug && !pszSetDataDir[0])
+        ShrinkDebugFile();
 
     printf("\n\n\nBitcoin version %s\nDefault data directory %s\n", FormatFullVersion().c_str(), GetDefaultDataDir().c_str());
 
