@@ -296,7 +296,7 @@ bool AppInit2(int argc, char* argv[])
         else if (nLoadWalletRet == DB_NEED_REWRITE)
         {
             strErrors += _("Wallet needed to be rewritten: restart Bitcoin to complete    \n");
-            fprintf(stderr, strErrors.c_str());
+            fprintf(stderr, "%s", strErrors.c_str());
             return false;
         }
         else
@@ -335,7 +335,7 @@ bool AppInit2(int argc, char* argv[])
 
     if (!strErrors.empty())
     {
-        fprintf(stderr, strErrors.c_str());
+        fprintf(stderr, "%s", strErrors.c_str());
         return false;
     }
 
@@ -414,7 +414,7 @@ bool AppInit2(int argc, char* argv[])
     {
         if (!BindListenPort(strErrors))
         {
-            fprintf(stderr, strErrors.c_str());
+            fprintf(stderr, "%s", strErrors.c_str());
             return false;
         }
     }
