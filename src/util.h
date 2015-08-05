@@ -146,6 +146,7 @@ void CreatePidFile(std::string pidFile, pid_t pid);
 void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet, std::map<std::string, std::vector<std::string> >& mapMultiSettingsRet);
 std::string GetDefaultDataDir();
 std::string GetDataDir();
+void ShrinkDebugFile();
 int GetRandInt(int nMax);
 uint64 GetRand(uint64 nMax);
 int64 GetTime();
