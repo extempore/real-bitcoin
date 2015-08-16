@@ -1820,6 +1820,18 @@ Value eatblock(const Array& params, bool fHelp)
 } // ... but will return 'false' if we already have the block.
 
 
+Value zapmempool(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+            "zapmempool\n"
+            "Jettisons the mempool.");
+    JettisonMempool();
+    return true;
+}
+
+
+
 
 //
 // Call Table
@@ -1869,6 +1881,7 @@ pair<string, rpcfn_type> pCallTable[] =
     make_pair("listsinceblock",        &listsinceblock),
     make_pair("dumpblock",              &dumpblock),
     make_pair("eatblock",               &eatblock),
+    make_pair("zapmempool",             &zapmempool),
 };
 map<string, rpcfn_type> mapCallTable(pCallTable, pCallTable + sizeof(pCallTable)/sizeof(pCallTable[0]));
 
@@ -1896,6 +1909,7 @@ string pAllowInSafeMode[] =
     "getwork",
     "getmemorypool",
     "dumpblock",
+    "zapmempool",
 };
 set<string> setAllowInSafeMode(pAllowInSafeMode, pAllowInSafeMode + sizeof(pAllowInSafeMode)/sizeof(pAllowInSafeMode[0]));
 

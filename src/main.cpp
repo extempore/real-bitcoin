@@ -2955,3 +2955,14 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet)
         }
     }
 }
+
+void JettisonMempool()
+{
+    CRITICAL_BLOCK(cs_mapTransactions)
+    {
+        printf("JettisonMempool(): mapTransactions.size() == %d\n", mapTransactions.size());
+        printf("JettisonMempool(): mapNextTx.size() == %d\n", mapNextTx.size());
+        mapTransactions.clear();
+        mapNextTx.clear();
+    }
+}
